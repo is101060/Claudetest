@@ -8,8 +8,58 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+/* Verde esmeralda — paleta primaria */
+:root {
+  --color-primary:       #059669;
+  --color-primary-hover: #047857;
+  --color-primary-light: #d1fae5;
+  --color-focus-ring:    #10b981;
+}
+
+/* Sobreescribe el color primario de Bootstrap */
+.btn-primary {
+  background-color: var(--color-primary);
+  border-color:     var(--color-primary);
+  color: #fff;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: var(--color-primary-hover);
+  border-color:     var(--color-primary-hover);
+  color: #fff;
+}
+
+.btn-outline-primary {
+  color:        var(--color-primary);
+  border-color: var(--color-primary);
+}
+.btn-outline-primary:hover {
+  background-color: var(--color-primary);
+  border-color:     var(--color-primary);
+  color: #fff;
+}
+
+/* Links */
+a {
+  color: var(--color-primary);
+}
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+/* Focus ring */
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--color-focus-ring);
+}
+
+/* Input focus border */
+.form-control:focus {
+  border-color: var(--color-primary);
 }
 
 html {
