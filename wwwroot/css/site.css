@@ -249,10 +249,17 @@ body {
 }
 
 .sidebar-icon {
-  font-size: 1.1rem;
   flex-shrink: 0;
   width: 22px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+}
+
+.sidebar-icon svg {
+  display: block;
+  color: inherit;
 }
 
 .sidebar-label {
