@@ -8,23 +8,50 @@ html {
   }
 }
 
-/* ── Tokens de color ──────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════
+   Tokens de color
+══════════════════════════════════════════════════════════════ */
 :root {
+  /* Paleta verde esmeralda */
   --color-primary:       #059669;
   --color-primary-hover: #047857;
   --color-focus-ring:    #10b981;
 
-  /* Modo claro */
-  --bg-body:       #f9fafb;
-  --bg-surface:    #ffffff;
-  --bg-input:      #ffffff;
-  --text-primary:  #111827;
-  --text-muted:    #6b7280;
-  --border-color:  #e5e7eb;
-  --footer-bg:     #ffffff;
+  /* Topbar */
+  --topbar-height: 52px;
+  --topbar-bg:     #059669;
+
+  /* Sidebar */
+  --sidebar-width: 240px;
+  --sidebar-bg:          #f3f4f6;
+  --sidebar-border:      #e5e7eb;
+  --sidebar-link-color:  #374151;
+  --sidebar-link-hover:  #e5e7eb;
+  --sidebar-link-active-bg:    #d1fae5;
+  --sidebar-link-active-color: #047857;
+  --sidebar-section-color:     #9ca3af;
+
+  /* Superficies */
+  --bg-body:      #f9fafb;
+  --bg-surface:   #ffffff;
+  --bg-input:     #ffffff;
+  --text-primary: #111827;
+  --text-muted:   #6b7280;
+  --border-color: #e5e7eb;
+  --footer-bg:    #ffffff;
 }
 
 [data-theme="dark"] {
+  --topbar-bg: #047857;
+
+  --sidebar-bg:          #1a2332;
+  --sidebar-border:      #2d3748;
+  --sidebar-link-color:  #d1d5db;
+  --sidebar-link-hover:  #2d3748;
+  --sidebar-link-active-bg:    #064e3b;
+  --sidebar-link-active-color: #10b981;
+  --sidebar-section-color:     #6b7280;
+
   --bg-body:      #111827;
   --bg-surface:   #1f2937;
   --bg-input:     #374151;
@@ -34,20 +61,254 @@ html {
   --footer-bg:    #1f2937;
 }
 
-/* ── Base ─────────────────────────────────────────────────────── */
-body {
-  margin-bottom: 60px;
-  background-color: var(--bg-body);
-  color: var(--text-primary);
-  transition: background-color 0.2s, color 0.2s;
-}
+/* ══════════════════════════════════════════════════════════════
+   Reset base
+══════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; }
 
 html {
   position: relative;
   min-height: 100%;
 }
 
-/* ── Botón primario (verde) ───────────────────────────────────── */
+body {
+  margin: 0;
+  background-color: var(--bg-body);
+  color: var(--text-primary);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Topbar
+══════════════════════════════════════════════════════════════ */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--topbar-height);
+  background-color: var(--topbar-bg);
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  gap: 0.75rem;
+  z-index: 1000;
+  transition: background-color 0.2s;
+}
+
+.topbar-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  line-height: 1;
+  opacity: 0.9;
+}
+.topbar-btn:hover { opacity: 1; background: rgba(255,255,255,0.15); }
+
+.topbar-brand {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.01em;
+}
+
+.topbar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.topbar-user {
+  color: rgba(255,255,255,0.75);
+  font-size: 0.85rem;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   App body — sidebar + contenido
+══════════════════════════════════════════════════════════════ */
+.app-body {
+  display: flex;
+  padding-top: var(--topbar-height);
+  min-height: 100vh;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Sidebar
+══════════════════════════════════════════════════════════════ */
+.sidebar {
+  position: fixed;
+  top: var(--topbar-height);
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-width);
+  background-color: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 900;
+  transition: transform 0.25s ease, width 0.25s ease, background-color 0.2s;
+}
+
+/* Estado colapsado — oculto en móvil, icon-only en desktop */
+.sidebar-collapsed .sidebar {
+  transform: translateX(-100%);
+}
+
+@media (min-width: 768px) {
+  .sidebar-collapsed .sidebar {
+    transform: none;
+    width: 56px;
+  }
+}
+
+/* Desplaza el contenido según el estado del sidebar */
+.main-wrapper {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  transition: margin-left 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--topbar-height));
+}
+
+.sidebar-collapsed .main-wrapper {
+  margin-left: 0;
+}
+
+@media (min-width: 768px) {
+  .sidebar-collapsed .main-wrapper {
+    margin-left: 56px;
+  }
+}
+
+/* En móvil el sidebar siempre empieza oculto */
+@media (max-width: 767px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .main-wrapper {
+    margin-left: 0;
+  }
+}
+
+/* ── Nav items ───────────────────────────────────────────── */
+.sidebar-nav {
+  padding: 0.75rem 0;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  margin: 0 0 0.5rem 0;
+  padding: 0;
+}
+
+.sidebar-section-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--sidebar-section-color);
+  padding: 0.75rem 1rem 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar-collapsed .sidebar-section-title {
+  opacity: 0;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 1rem;
+  color: var(--sidebar-link-color);
+  text-decoration: none;
+  border-radius: 6px;
+  margin: 1px 8px;
+  transition: background-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.sidebar-link:hover {
+  background-color: var(--sidebar-link-hover);
+  color: var(--sidebar-link-color);
+  text-decoration: none;
+}
+
+.sidebar-link.active {
+  background-color: var(--sidebar-link-active-bg);
+  color: var(--sidebar-link-active-color);
+  font-weight: 600;
+}
+
+.sidebar-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  width: 22px;
+  text-align: center;
+}
+
+.sidebar-label {
+  font-size: 0.9rem;
+  transition: opacity 0.2s;
+}
+
+/* Ocultar labels cuando colapsado en desktop */
+@media (min-width: 768px) {
+  .sidebar-collapsed .sidebar-label {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .sidebar-collapsed .sidebar-link {
+    justify-content: center;
+    padding: 0.55rem 0;
+    margin: 1px 4px;
+  }
+}
+
+/* ── Overlay móvil ───────────────────────────────────────── */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 850;
+}
+
+.sidebar-overlay.active {
+  display: block;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Contenido principal
+══════════════════════════════════════════════════════════════ */
+.main-content {
+  flex: 1;
+  padding: 1.5rem;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Footer
+══════════════════════════════════════════════════════════════ */
+.footer {
+  background-color: var(--footer-bg);
+  border-color:     var(--border-color) !important;
+  color:            var(--text-muted);
+  padding: 0.75rem 1.5rem;
+  font-size: 0.85rem;
+  transition: background-color 0.2s;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Bootstrap overrides
+══════════════════════════════════════════════════════════════ */
 .btn-primary {
   background-color: var(--color-primary);
   border-color:     var(--color-primary);
@@ -71,61 +332,36 @@ html {
   color: #fff;
 }
 
-/* ── Links ────────────────────────────────────────────────────── */
-a {
-  color: var(--color-primary);
-}
-a:hover {
-  color: var(--color-primary-hover);
-}
+a { color: var(--color-primary); }
+a:hover { color: var(--color-primary-hover); }
 
-/* ── Focus ring ───────────────────────────────────────────────── */
 .btn:focus,
 .btn:active:focus,
-.btn-link.nav-link:focus,
 .form-control:focus,
 .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem var(--bg-surface), 0 0 0 0.25rem var(--color-focus-ring);
 }
 
-.form-control:focus {
-  border-color: var(--color-primary);
-}
+.form-control:focus  { border-color: var(--color-primary); }
 
-/* ── Cards ────────────────────────────────────────────────────── */
 .card {
   background-color: var(--bg-surface);
   border-color:     var(--border-color);
   color:            var(--text-primary);
 }
 
-/* ── Inputs ───────────────────────────────────────────────────── */
 .form-control {
   background-color: var(--bg-input);
   border-color:     var(--border-color);
   color:            var(--text-primary);
 }
-.form-control:disabled {
-  background-color: var(--border-color);
-}
-.form-label {
-  color: var(--text-primary);
-}
+.form-control:disabled { background-color: var(--border-color); }
+.form-label  { color: var(--text-primary); }
+.text-muted  { color: var(--text-muted) !important; }
 
-/* ── Texto muted ──────────────────────────────────────────────── */
-.text-muted {
-  color: var(--text-muted) !important;
-}
-
-/* ── Footer ───────────────────────────────────────────────────── */
-.footer {
-  background-color: var(--footer-bg);
-  border-color:     var(--border-color) !important;
-  color:            var(--text-muted);
-  transition: background-color 0.2s;
-}
-
-/* ── Toggle de tema ───────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════
+   Toggle de tema
+══════════════════════════════════════════════════════════════ */
 .theme-toggle {
   background: none;
   border: none;
@@ -133,14 +369,11 @@ a:hover {
   padding: 4px 8px;
   color: #fff;
   opacity: 0.85;
-  line-height: 1;
   font-size: 1.1rem;
+  line-height: 1;
 }
-.theme-toggle:hover {
-  opacity: 1;
-}
+.theme-toggle:hover { opacity: 1; }
 
-/* Icono según el modo activo */
 .icon-sun  { display: none; }
 .icon-moon { display: inline; }
 

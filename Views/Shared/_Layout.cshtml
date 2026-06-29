@@ -1,70 +1,132 @@
+@{
+    var ctrl   = ViewContext.RouteData.Values["controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - ClaudetestMVC</title>
-    <!-- Aplica el tema guardado antes de renderizar para evitar parpadeo -->
-    <script>(function(){var t=localStorage.getItem('theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+    <script>(function(){var t=localStorage.getItem('theme')||'light';document.documentElement.setAttribute('data-theme',t);var s=localStorage.getItem('sidebar');if(s==='collapsed')document.documentElement.classList.add('sidebar-collapsed');})();</script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ClaudetestMVC.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark mb-3" style="background-color:#059669;">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ClaudetestMVC</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav ms-auto align-items-center">
-                        <li class="nav-item me-2">
-                            <button class="theme-toggle" id="themeToggle" title="Cambiar modo claro/oscuro" aria-label="Cambiar tema">
-                                <!-- Luna: visible en modo claro -->
-                                <span class="icon-moon">🌙</span>
-                                <!-- Sol: visible en modo oscuro -->
-                                <span class="icon-sun">☀️</span>
-                            </button>
-                        </li>
-                        @if (User.Identity?.IsAuthenticated == true)
-                        {
-                            <li class="nav-item d-flex align-items-center me-2">
-                                <span class="text-white-50 small">@User.Identity.Name</span>
-                            </li>
-                            <li class="nav-item">
-                                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
-                                    @Html.AntiForgeryToken()
-                                    <button type="submit" class="btn btn-outline-light btn-sm">Cerrar sesión</button>
-                                </form>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - ClaudetestMVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <!-- ── Topbar ───────────────────────────────────────────────── -->
+    <header class="topbar">
+        <button class="topbar-btn" id="sidebarToggle" aria-label="Menú">
+            <span class="hamburger">&#9776;</span>
+        </button>
+        <span class="topbar-brand">ClaudetestMVC</span>
+
+        <div class="topbar-right">
+            <button class="theme-toggle" id="themeToggle" title="Cambiar tema" aria-label="Cambiar tema">
+                <span class="icon-moon">🌙</span>
+                <span class="icon-sun">☀️</span>
+            </button>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <span class="topbar-user">@User.Identity.Name</span>
+                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-outline-light btn-sm">Cerrar sesión</button>
+                </form>
+            }
         </div>
-    </footer>
+    </header>
+
+    <!-- ── Cuerpo principal ──────────────────────────────────────── -->
+    <div class="app-body">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <nav class="sidebar-nav">
+
+                <div class="sidebar-section-title">Principal</div>
+                <ul>
+                    <li>
+                        <a class="sidebar-link @(ctrl=="Home" && action=="Index" ? "active" : "")"
+                           asp-controller="Home" asp-action="Index">
+                            <span class="sidebar-icon">🏠</span>
+                            <span class="sidebar-label">Inicio</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="sidebar-link @(ctrl=="Dashboard" ? "active" : "")"
+                           asp-controller="Dashboard" asp-action="Index">
+                            <span class="sidebar-icon">📊</span>
+                            <span class="sidebar-label">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="sidebar-link @(ctrl=="Reportes" ? "active" : "")"
+                           asp-controller="Reportes" asp-action="Index">
+                            <span class="sidebar-icon">📈</span>
+                            <span class="sidebar-label">Reportes</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="sidebar-section-title">Gestión</div>
+                <ul>
+                    <li>
+                        <a class="sidebar-link @(ctrl=="Usuarios" ? "active" : "")"
+                           asp-controller="Usuarios" asp-action="Index">
+                            <span class="sidebar-icon">👥</span>
+                            <span class="sidebar-label">Usuarios</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="sidebar-link @(ctrl=="Catalogos" ? "active" : "")"
+                           asp-controller="Catalogos" asp-action="Index">
+                            <span class="sidebar-icon">📂</span>
+                            <span class="sidebar-label">Catálogos</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="sidebar-section-title">Sistema</div>
+                <ul>
+                    <li>
+                        <a class="sidebar-link @(ctrl=="Home" && action=="Privacy" ? "active" : "")"
+                           asp-controller="Home" asp-action="Privacy">
+                            <span class="sidebar-icon">🔒</span>
+                            <span class="sidebar-label">Privacidad</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="sidebar-link @(ctrl=="Configuracion" ? "active" : "")"
+                           asp-controller="Configuracion" asp-action="Index">
+                            <span class="sidebar-icon">⚙️</span>
+                            <span class="sidebar-label">Configuración</span>
+                        </a>
+                    </li>
+                </ul>
+
+            </nav>
+        </aside>
+
+        <!-- Overlay móvil -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Contenido -->
+        <div class="main-wrapper">
+            <main class="main-content">
+                @RenderBody()
+            </main>
+
+            <footer class="footer border-top text-muted">
+                <div>
+                    &copy; 2026 - ClaudetestMVC - <a asp-controller="Home" asp-action="Privacy">Privacidad</a>
+                </div>
+            </footer>
+        </div>
+
+    </div><!-- /app-body -->
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/apexcharts/apexcharts.min.js"></script>
