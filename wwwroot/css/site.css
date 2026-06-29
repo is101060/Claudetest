@@ -8,15 +8,46 @@ html {
   }
 }
 
-/* Verde esmeralda — paleta primaria */
+/* ── Tokens de color ──────────────────────────────────────────── */
 :root {
   --color-primary:       #059669;
   --color-primary-hover: #047857;
-  --color-primary-light: #d1fae5;
   --color-focus-ring:    #10b981;
+
+  /* Modo claro */
+  --bg-body:       #f9fafb;
+  --bg-surface:    #ffffff;
+  --bg-input:      #ffffff;
+  --text-primary:  #111827;
+  --text-muted:    #6b7280;
+  --border-color:  #e5e7eb;
+  --footer-bg:     #ffffff;
 }
 
-/* Sobreescribe el color primario de Bootstrap */
+[data-theme="dark"] {
+  --bg-body:      #111827;
+  --bg-surface:   #1f2937;
+  --bg-input:     #374151;
+  --text-primary: #f9fafb;
+  --text-muted:   #9ca3af;
+  --border-color: #374151;
+  --footer-bg:    #1f2937;
+}
+
+/* ── Base ─────────────────────────────────────────────────────── */
+body {
+  margin-bottom: 60px;
+  background-color: var(--bg-body);
+  color: var(--text-primary);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+/* ── Botón primario (verde) ───────────────────────────────────── */
 .btn-primary {
   background-color: var(--color-primary);
   border-color:     var(--color-primary);
@@ -40,7 +71,7 @@ html {
   color: #fff;
 }
 
-/* Links */
+/* ── Links ────────────────────────────────────────────────────── */
 a {
   color: var(--color-primary);
 }
@@ -48,25 +79,70 @@ a:hover {
   color: var(--color-primary-hover);
 }
 
-/* Focus ring */
+/* ── Focus ring ───────────────────────────────────────────────── */
 .btn:focus,
 .btn:active:focus,
 .btn-link.nav-link:focus,
 .form-control:focus,
 .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--color-focus-ring);
+  box-shadow: 0 0 0 0.1rem var(--bg-surface), 0 0 0 0.25rem var(--color-focus-ring);
 }
 
-/* Input focus border */
 .form-control:focus {
   border-color: var(--color-primary);
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+/* ── Cards ────────────────────────────────────────────────────── */
+.card {
+  background-color: var(--bg-surface);
+  border-color:     var(--border-color);
+  color:            var(--text-primary);
 }
 
-body {
-  margin-bottom: 60px;
+/* ── Inputs ───────────────────────────────────────────────────── */
+.form-control {
+  background-color: var(--bg-input);
+  border-color:     var(--border-color);
+  color:            var(--text-primary);
 }
+.form-control:disabled {
+  background-color: var(--border-color);
+}
+.form-label {
+  color: var(--text-primary);
+}
+
+/* ── Texto muted ──────────────────────────────────────────────── */
+.text-muted {
+  color: var(--text-muted) !important;
+}
+
+/* ── Footer ───────────────────────────────────────────────────── */
+.footer {
+  background-color: var(--footer-bg);
+  border-color:     var(--border-color) !important;
+  color:            var(--text-muted);
+  transition: background-color 0.2s;
+}
+
+/* ── Toggle de tema ───────────────────────────────────────────── */
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  color: #fff;
+  opacity: 0.85;
+  line-height: 1;
+  font-size: 1.1rem;
+}
+.theme-toggle:hover {
+  opacity: 1;
+}
+
+/* Icono según el modo activo */
+.icon-sun  { display: none; }
+.icon-moon { display: inline; }
+
+[data-theme="dark"] .icon-sun  { display: inline; }
+[data-theme="dark"] .icon-moon { display: none; }

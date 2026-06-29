@@ -1,9 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - ClaudetestMVC</title>
+    <!-- Aplica el tema guardado antes de renderizar para evitar parpadeo -->
+    <script>(function(){var t=localStorage.getItem('theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ClaudetestMVC.styles.css" asp-append-version="true" />
@@ -26,9 +28,17 @@
                             <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
-                    @if (User.Identity?.IsAuthenticated == true)
-                    {
-                        <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav ms-auto align-items-center">
+                        <li class="nav-item me-2">
+                            <button class="theme-toggle" id="themeToggle" title="Cambiar modo claro/oscuro" aria-label="Cambiar tema">
+                                <!-- Luna: visible en modo claro -->
+                                <span class="icon-moon">🌙</span>
+                                <!-- Sol: visible en modo oscuro -->
+                                <span class="icon-sun">☀️</span>
+                            </button>
+                        </li>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
                             <li class="nav-item d-flex align-items-center me-2">
                                 <span class="text-white-50 small">@User.Identity.Name</span>
                             </li>
@@ -38,8 +48,8 @@
                                     <button type="submit" class="btn btn-outline-light btn-sm">Cerrar sesión</button>
                                 </form>
                             </li>
-                        </ul>
-                    }
+                        }
+                    </ul>
                 </div>
             </div>
         </nav>

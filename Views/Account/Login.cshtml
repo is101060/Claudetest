@@ -9,11 +9,20 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - ClaudetestMVC</title>
+    <script>(function(){var t=localStorage.getItem('theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <style>
         body {
-            background-color: #ecfdf5;
+            background-color: var(--bg-body);
+        }
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--bg-body);
+            transition: background-color 0.2s;
         }
         .login-card {
             max-width: 400px;
@@ -23,14 +32,33 @@
             color: #059669;
             font-weight: 600;
         }
-        .login-card .form-control:focus {
-            border-color: #059669;
-            box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #10b981;
+        /* Toggle flotante en la esquina */
+        .login-theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 2.2rem;
+            height: 2.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,.15);
+            transition: background-color 0.2s;
         }
     </style>
 </head>
 <body>
-    <div class="d-flex justify-content-center align-items-center min-vh-100">
+    <button class="login-theme-toggle" id="themeToggle" title="Cambiar modo claro/oscuro" aria-label="Cambiar tema">
+        <span class="icon-moon">🌙</span>
+        <span class="icon-sun">☀️</span>
+    </button>
+
+    <div class="login-wrapper">
         <div class="card shadow-sm login-card">
             <div class="card-body p-4">
                 <h4 class="card-title text-center mb-4">ClaudetestMVC</h4>
@@ -63,5 +91,6 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 </body>
 </html>
